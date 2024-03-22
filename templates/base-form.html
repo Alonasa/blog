@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block h1 %}{{h1}}{% endblock %}
+{% block description %}{{description}}{% endblock %}
+{% from "bootstrap5/form.html" import render_form %}
+{% block content %}
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            {% if message %}
+            <p class="text-danger">{{message}}<a href="/register" class="btn text-primary">Register</a></p>
+            {% endif %}
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token }}
+                {{ ckeditor.load()}}
+                {{ ckeditor.config(language='en', name='body', width=600) }}
+                {{render_form(form, novalidate=True)}}
+            
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

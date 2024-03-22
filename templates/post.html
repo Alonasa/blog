@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        <title>Alona's Blog - Here's my posts</title>
+        <link rel="icon" type="image/x-icon" href="../../static/assets/favicon.ico"/>
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet"
+              type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+              rel="stylesheet" type="text/css"/>
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../../static/css/styles.css" rel="stylesheet"/>
+        {% from "bootstrap5/form.html" import render_form %}
+    </head>
+    <body>
+        <!-- Navigation-->
+        {% include "navigation.html" %}
+        <!-- Page Header-->
+        {% for post in posts%}
+        {% if id == post.id %}
+        <header class="masthead" style="background-image: url('{{post.img_url}}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1>{{post.title}}</h1>
+                            <h2 class="subheading">{{post.subtitle}}</h2>
+                            <span class="meta">
+                                Posted by
+                                <a href="authors/{{post.author}}">{{post.author.name}}</a>
+                                on {{post.date}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Post Content-->
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        {{translator(post.body)}}
+                        {% if current_user.id == post.author.id %}
+                        <a class="btn btn-primary btn-sm rounded justify-content-end"
+                           href="{{url_for('edit_post', post_id=post.id)}}">Edit
+                            Post
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% for comment in comments %}
+                    {% for com in comment.comments %}
+                    <div class="card mb-3 mt-3">
+                        <div class="card-body">
+                            <div class="d-flex flex-start align-items-center">
+                                <div>
+                                    <img class="rounded-circle shadow-1-strong me-3"
+                                         src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar"
+                                         width="60"
+                                         height="60"/>
+                                    <h6 class="fw-bold text-primary mb-1">{% for user in users %} {% if user.id ==
+                                        com.author_id %}{{user.name}}{% endif %}{% endfor %}</h6>
+                                </div>
+                                <div>
+                                    <p class="text-muted small m-0">{{com.date}}</p>
+                                    {{translator(com.text)}}
+                                </div>
+                            </div>
+                            <div class="small d-flex justify-content-start">
+                                <a href="#!" class="d-flex align-items-center me-3">
+                                    <i class="far fa-thumbs-up me-2"></i>
+                                    <p class="m-0">Like</p>
+                                </a>
+                                <a href="#!" class="d-flex align-items-center me-3">
+                                    <i class="far fa-comment-dots me-2"></i>
+                                    <p class="m-0">Comment</p>
+                                </a>
+                                <a href="#!" class="d-flex align-items-center me-3">
+                                    <i class="fas fa-share me-2"></i>
+                                    <p class="m-0">Share</p>
+                                </a>
+                            </div>
+                            
+                            {% if authenticated %}
+                            <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                                <div class="d-flex flex-start w-100">
+                                    <img class="rounded-circle shadow-1-strong me-3"
+                                         src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar"
+                                         width="40"
+                                         height="40"/>
+                                    <div class="form-outline w-100">
+                                        <textarea class="form-control" id="textAreaExample" rows="4"
+                                                  style="background: #fff;"></textarea>
+                                        <label class="form-label" for="textAreaExample">Message</label>
+                                    </div>
+                                </div>
+                                <div class="float-end mt-2 pt-1">
+                                    <button type="button" class="btn btn-primary btn-sm">Post comment</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                                </div>
+                            </div>
+                            {% endif %}
+                        
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+                {% if authenticated %}
+                <form method="POST" action="/new-comment/{{post.id}}">
+                    {{ form.csrf_token }}
+                    {{ ckeditor.load()}}
+                    {{ ckeditor.config(language='en', name='body', width=600)}}
+                    {{render_form(form, novalidate=True)}}
+                </form>
+                {% endif %}
+            </div>
+        </article>
+        {% endif %}
+        {% endfor %}
+        <!-- Footer-->
+        {% include "footer.html" %}
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../../static/js/scripts.js"></script>
+    </body>
+</html>

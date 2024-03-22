@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container px-4 px-lg-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                         class="rounded-circle img-fluid" style="width: 150px;">
+                    <h5 class="my-3">{{user.name.split(" ")[0]}}</h5>
+                    <p class="text-muted mb-1">Hello, My name {{user.name.split(" ")[0]}} and I am writer</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Full Name</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">{{user.name}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">{{user.email}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="d-flex justify-content-center mb-2">
+                            <button type="button" class="btn btn-primary">Follow</button>
+                            <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if posts %}
+{% for post in posts %}
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row card gx-4 gx-lg-5 justify-content-center">
+            <div>
+                <a href="/posts/post/{{post.id}}">
+                    {{ translator(post.body|truncate(100, True, '')) }}
+                    {% if post.body|length > 100 %}...{% endif %}
+                    Read More</a>
+                <p class="m-0"><b>Posted on: </b>{{post.date}}</p>
+                {% if current_user.id == post.author.id %}
+                <a class="btn btn-primary btn-sm rounded justify-content-end"
+                   href="{{url_for('edit_post', post_id=post.id)}}">Edit
+                    Post
+                </a>
+                {% endif %}
+            </div>
+            <div class="mb-3 mt-3">
+                <div>
+                    <div class="small d-flex justify-content-start">
+                        <a href="#!" class="d-flex align-items-center me-3">
+                            <i class="far fa-thumbs-up me-2"></i>
+                            <p class="m-0">Like</p>
+                        </a>
+                        <a href="#!" class="d-flex align-items-center me-3">
+                            <i class="far fa-comment-dots me-2"></i>
+                            <p class="m-0">Comment</p>
+                        </a>
+                        <a href="#!" class="d-flex align-items-center me-3">
+                            <i class="fas fa-share me-2"></i>
+                            <p class="m-0">Share</p>
+                        </a>
+                    </div>
+                    
+                    {% if authenticated %}
+                    <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                        <div class="d-flex flex-start w-100">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                 src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar"
+                                 width="40"
+                                 height="40"/>
+                            <div class="form-outline w-100">
+                                        <textarea class="form-control" id="textAreaExample" rows="4"
+                                                  style="background: #fff;"></textarea>
+                                <label class="form-label" for="textAreaExample">Message</label>
+                            </div>
+                        </div>
+                        <div class="float-end mt-2 pt-1">
+                            <button type="button" class="btn btn-primary btn-sm">Post comment</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                
+                </div>
+            </div>
+        
+        </div>
+    </div>
+</article>
+{% endfor %}
+{% endif %}
+{% endblock %}

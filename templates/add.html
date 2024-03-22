@@ -1,0 +1,14 @@
+{% if is_edit %}
+{% set h1 = "Edit Post" %}
+{% set title = "Edit your old post" %}
+{% set description = "Here You Can Edit Your Post" %}
+{% block extra_style %}
+<link href="../static/css/styles.css" rel="stylesheet"/>
+{% endblock %}
+{% include "base-form.html" %}
+{% else %}
+{% set title = "Alona's Blog - Add New Post" %}
+{% set h1 = "Add New Post" %}
+{% set description = "Here You Can Add A New Post" %}
+{% include "base-form.html" %}
+{% endif %}
