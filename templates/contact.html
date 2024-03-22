@@ -44,8 +44,7 @@
                         <div class="my-5">
                             <form action="/contact" method="post" id="contactForm"
                                   data-sb-form-api-token="API_TOKEN">
-                                {{ form.hidden_tag() }}
-                                {{ form.csrf_token }}
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="form-floating">
                                     <input class="form-control" id="name" name="name" type="text"
                                            placeholder="Enter your name..."
