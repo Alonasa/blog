@@ -16,7 +16,7 @@ from markupsafe import Markup
 from sqlalchemy import Integer, Text, String, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
-from wtforms import StringField, URLField, SubmitField, EmailField, PasswordField
+from wtforms import StringField, URLField, SubmitField, EmailField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Length
 
 app = Flask(__name__, static_url_path='/static')
@@ -176,10 +176,21 @@ def build_about():
     return render_template("about.html")
 
 
+class SendRequestForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()], render_kw={"placeholder": "Enter your name...**"})
+    email = EmailField("Email Address", validators=[DataRequired()], render_kw={"placeholder": "Your e-mail e.g. "
+                                                                                               "mymai@mail.com **"})
+    phone = StringField("Phone Number", render_kw={"placeholder": "Your phone number "})
+    message = TextAreaField("Message", validators=[DataRequired()], render_kw={"placeholder": "Your message **"})
+    submit = SubmitField("Send", render_kw={"class": "btn-primary btn-sm mt-3"})
+
+
 @app.route("/contact", methods=["POST", "GET"])
 def build_contact():
+    form = SendRequestForm()
     if request.method == "POST":
         try:
+            form.validate_on_submit()
             name = request.form["name"].strip()
             e_mail = request.form["email"].strip()
             phone = request.form["phone"].strip()
@@ -210,7 +221,7 @@ def build_contact():
             return render_template("contact.html", title="An error occurred: " + str(e),
                                    description="We have a technical issues. Please try again later", error=True)
 
-    return render_template("contact.html")
+    return render_template("contact.html", form=form)
 
 
 @app.route("/posts/post/<int:post_id>", methods=["GET", "POST"])
