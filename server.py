@@ -4,7 +4,6 @@ from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from functools import wraps
-
 from flask import Flask, render_template, request, redirect, url_for, flash, abort
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor, CKEditorField
@@ -18,7 +17,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, URLField, SubmitField, EmailField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Length
-
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = os.environ.get("SEC_KEY")
 
@@ -191,10 +189,10 @@ def build_contact():
     if request.method == "POST":
         try:
             form.validate_on_submit()
-            name = request.form["name"].strip()
-            e_mail = request.form["email"].strip()
-            phone = request.form["phone"].strip()
-            message = request.form["message"].strip()
+            name = form.name.data.strip()
+            e_mail = form.email.data.strip()
+            phone = form.phone.data.strip()
+            message = form.message.data.strip()
             message_content = f"Name: {name}\nEmail: {e_mail}\nPhone: {phone}\nMessage: {message}"
 
             msg = MIMEMultipart()
