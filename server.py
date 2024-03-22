@@ -198,12 +198,12 @@ def build_contact():
             msg = MIMEMultipart()
             msg["From"] = e_mail
             msg["To"] = my_email
-            msg["Subject"] = e_mail
+            msg["Subject"] = "You received a new request"
 
             text = MIMEText(message_content, "plain")
             msg.attach(text)
 
-            with smtplib.SMTP("smtp.gmail.com") as connection:
+            with smtplib.SMTP("smtp.gmail.com:587") as connection:
                 connection.starttls()
                 connection.login(user=my_email, password=password)
                 connection.send_message(msg)
