@@ -15,7 +15,7 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
               rel="stylesheet" type="text/css"/>
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../../static/css/styles.css" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css') }} "/>
         {% from "bootstrap5/form.html" import render_form %}
     </head>
     <body>
@@ -33,7 +33,7 @@
                             <h2 class="subheading">{{post.subtitle}}</h2>
                             <span class="meta">
                                 Posted by
-                                <a href="authors/{{post.author}}">{{post.author.name}}</a>
+                                <a href="{{url_for('user_profile', author_name=post.author.name.lower())}}">{{post.author.name}}</a>
                                 on {{post.date}}
                             </span>
                         </div>
