@@ -365,7 +365,7 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return render_template("index.html")
+    return redirect(url_for('build_main'))
 
 
 @app.route("/user")
